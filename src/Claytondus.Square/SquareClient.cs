@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
 
@@ -20,41 +21,95 @@ namespace Claytondus.Square
 
 	    protected async Task<T> GetAsync<T>(string resource, object queryParams = null)
 	    {
-			var poco = await _squareUrl
-				.AppendPathSegment(resource)
-				.SetQueryParams(queryParams)
-				.WithDefaults()
-				.WithOAuthBearerToken(_authToken)
-				.GetJsonAsync<T>();
-			return poco;
-	    }
-
-	    protected async Task PostAsync<T>(string resource, object body)
-	    {
-		    await _squareUrl
-			    .AppendPathSegment(resource)
-			    .WithDefaults()
-			    .WithOAuthBearerToken(_authToken)
-			    .PostJsonAsync(body);
-	    }
-
-		protected async Task PutAsync<T>(string resource, object body)
-		{
-			await _squareUrl
-				.AppendPathSegment(resource)
-				.WithDefaults()
-				.WithOAuthBearerToken(_authToken)
-				.PutJsonAsync(body);
+		    try
+		    {
+			    return await _squareUrl
+				    .AppendPathSegment(resource)
+				    .SetQueryParams(queryParams)
+				    .WithDefaults()
+				    .WithOAuthBearerToken(_authToken)
+				    .GetJsonAsync<T>();
+			}
+			catch (FlurlHttpTimeoutException)
+			{
+				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+			}
+			catch (FlurlHttpException ex)
+			{
+				var squareEx = ex.GetResponseJson<SquareException>();
+				squareEx.HttpStatus = ex.Call.HttpStatus;
+				throw squareEx;
+			}
 		}
 
-		protected async Task DeleteAsync<T>(string resource, object queryParams)
+	    protected async Task<T> PostAsync<T>(string resource, object body)
+	    {
+			try
+			{
+				return await _squareUrl
+					.AppendPathSegment(resource)
+					.WithDefaults()
+					.WithOAuthBearerToken(_authToken)
+					.PostJsonAsync(body)
+					.ReceiveJson<T>();
+			}
+			catch (FlurlHttpTimeoutException)
+			{
+				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+			}
+			catch (FlurlHttpException ex)
+			{
+				var squareEx = ex.GetResponseJson<SquareException>();
+				squareEx.HttpStatus = ex.Call.HttpStatus;
+				throw squareEx;
+			}
+			
+	    }
+
+		protected async Task<T> PutAsync<T>(string resource, object body)
 		{
-			await _squareUrl
-				.AppendPathSegment(resource)
-				.SetQueryParams(queryParams)
-				.WithDefaults()
-				.WithOAuthBearerToken(_authToken)
-				.DeleteAsync();
+			try
+			{
+				return await _squareUrl
+					.AppendPathSegment(resource)
+					.WithDefaults()
+					.WithOAuthBearerToken(_authToken)
+					.PutJsonAsync(body)
+					.ReceiveJson<T>();
+			}
+			catch (FlurlHttpTimeoutException)
+			{
+				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+			}
+			catch (FlurlHttpException ex)
+			{
+				var squareEx = ex.GetResponseJson<SquareException>();
+				squareEx.HttpStatus = ex.Call.HttpStatus;
+				throw squareEx;
+			}
+		}
+
+		protected async Task DeleteAsync(string resource, object queryParams)
+		{
+			try
+			{
+				await _squareUrl
+					.AppendPathSegment(resource)
+					.SetQueryParams(queryParams)
+					.WithDefaults()
+					.WithOAuthBearerToken(_authToken)
+					.DeleteAsync();
+			}
+			catch (FlurlHttpTimeoutException)
+			{
+				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+			}
+			catch (FlurlHttpException ex)
+			{
+				var squareEx = ex.GetResponseJson<SquareException>();
+				squareEx.HttpStatus = ex.Call.HttpStatus;
+				throw squareEx;
+			}
 		}
 	}
 

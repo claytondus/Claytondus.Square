@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\SquareDiscount.cs" />
+    <Compile Include="Models\SquareException.cs" />
     <Compile Include="Models\SquareListOrder.cs" />
     <Compile Include="Models\SquareModifier.cs" />
     <Compile Include="Models\SquarePaymentItemDetail.cs" />
