@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Claytondus.Square.Models
 {
 	public class SquareException : Exception
 	{
-		[JsonProperty(PropertyName = "type")]
+		[JsonConstructor]
+		public SquareException(string type, string message) : base(message)
+		{
+			SquareType = type;
+		}
+
+		protected SquareException(SerializationInfo info, StreamingContext context)
+		{
+		}
+
 		public string SquareType { get; set; }
 
-		[JsonProperty(PropertyName = "message")]
-		public string SquareMessage { get; set; }
-
 		public HttpStatusCode? HttpStatus { get; set; }
+
 
 	}
 }

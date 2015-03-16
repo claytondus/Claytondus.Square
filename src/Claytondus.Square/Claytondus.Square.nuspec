@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/claytondus/Claytondus.Square</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A C# wrapper for the Square Connect API.  I AM NOT AFFILIATED WITH SQUARE, INC. IN ANY WAY.</description>
+    <releaseNotes>Removed WebApi dependency</releaseNotes>
+    <copyright>Copyright 2015 Clayton Davis and Square, Inc.</copyright>
+    <tags>Square</tags>
+  </metadata>
+</package>

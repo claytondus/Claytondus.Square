@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square", "Clayto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square.Test", "Claytondus.Square.Test\Claytondus.Square.Test.csproj", "{A07AE77D-9F16-4D13-941C-CD6573F71646}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square.Driver", "Claytondus.Square.Driver\Claytondus.Square.Driver.csproj", "{54CC70C0-7A5F-42D6-B62D-E403E8FE4A51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A07AE77D-9F16-4D13-941C-CD6573F71646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A07AE77D-9F16-4D13-941C-CD6573F71646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A07AE77D-9F16-4D13-941C-CD6573F71646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54CC70C0-7A5F-42D6-B62D-E403E8FE4A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54CC70C0-7A5F-42D6-B62D-E403E8FE4A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54CC70C0-7A5F-42D6-B62D-E403E8FE4A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54CC70C0-7A5F-42D6-B62D-E403E8FE4A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

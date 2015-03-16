@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Claytondus.Square")]
-[assembly: AssemblyDescription("I AM NOT AFFILIATED WITH SQUARE, INC. IN ANY WAY.  A C# wrapper over the Square Connect API")]
+[assembly: AssemblyTitle("Claytondus.Square.Driver")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Clayton Davis")]
-[assembly: AssemblyProduct("Claytondus.Square")]
-[assembly: AssemblyCopyright("Copyright © 2015 Clayton Davis and Square, Inc.")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Claytondus.Square.Driver")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("144ebdd3-5dfe-49b1-acfd-04ab0d76d521")]
+[assembly: Guid("54cc70c0-7a5f-42d6-b62d-e403e8fe4a51")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.1.0")]
-[assembly: AssemblyFileVersion("0.1.1.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

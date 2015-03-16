@@ -7,7 +7,7 @@ namespace Claytondus.Square
 {
     public class SquareClient
     {
-	    protected readonly Url _squareUrl = new Url("https://connect.squareup.com");
+	    protected readonly Url SquareUrl = new Url("https://connect.squareup.com");
 	    private readonly string _authToken;
 
 		public SquareClient()
@@ -23,7 +23,7 @@ namespace Claytondus.Square
 	    {
 		    try
 		    {
-			    return await _squareUrl
+			    return await SquareUrl
 				    .AppendPathSegment(resource)
 				    .SetQueryParams(queryParams)
 				    .WithDefaults()
@@ -32,12 +32,12 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpTimeoutException)
 			{
-				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+				throw new SquareException("timeout", "Request timed out.");
 			}
 			catch (FlurlHttpException ex)
 			{
-				var squareEx = ex.GetResponseJson<SquareException>();
-				squareEx.HttpStatus = ex.Call.HttpStatus;
+				var response = ex.GetResponseJson();
+				var squareEx = new SquareException(response["type"],response["message"]) {HttpStatus = ex.Call.HttpStatus};
 				throw squareEx;
 			}
 		}
@@ -46,7 +46,7 @@ namespace Claytondus.Square
 	    {
 			try
 			{
-				return await _squareUrl
+				return await SquareUrl
 					.AppendPathSegment(resource)
 					.WithDefaults()
 					.WithOAuthBearerToken(_authToken)
@@ -55,7 +55,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpTimeoutException)
 			{
-				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+				throw new SquareException("timeout", "Request timed out.");
 			}
 			catch (FlurlHttpException ex)
 			{
@@ -70,7 +70,7 @@ namespace Claytondus.Square
 		{
 			try
 			{
-				return await _squareUrl
+				return await SquareUrl
 					.AppendPathSegment(resource)
 					.WithDefaults()
 					.WithOAuthBearerToken(_authToken)
@@ -79,7 +79,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpTimeoutException)
 			{
-				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+				throw new SquareException("timeout", "Request timed out.");
 			}
 			catch (FlurlHttpException ex)
 			{
@@ -93,7 +93,7 @@ namespace Claytondus.Square
 		{
 			try
 			{
-				await _squareUrl
+				await SquareUrl
 					.AppendPathSegment(resource)
 					.SetQueryParams(queryParams)
 					.WithDefaults()
@@ -102,7 +102,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpTimeoutException)
 			{
-				throw new SquareException() { SquareType = "timeout", SquareMessage = "Request timed out." };
+				throw new SquareException("timeout", "Request timed out.");
 			}
 			catch (FlurlHttpException ex)
 			{
