@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
+using Newtonsoft.Json;
 
 namespace Claytondus.Square
 {
@@ -19,17 +22,23 @@ namespace Claytondus.Square
 			_authToken = authToken;
 		}
 
-	    protected async Task<T> GetAsync<T>(string resource, object queryParams = null)
+	    protected async Task<SquareResponse<T>> GetAsync<T>(string resource, object queryParams = null) where T : class
 	    {
 		    try
 		    {
-			    return await SquareUrl
+			    var response = await SquareUrl
 				    .AppendPathSegment(resource)
 				    .SetQueryParams(queryParams)
 				    .WithDefaults()
 				    .WithOAuthBearerToken(_authToken)
-				    .GetJsonAsync<T>();
-			}
+					.GetAsync();
+			    var responseObject = new SquareResponse<T>
+			    {
+				    Response = JsonConvert.DeserializeObject<T>(response.Content.ToString()),
+				    Link = new Url(response.Headers.First(h => h.Key == "Link").Value.First())
+			    };
+			    return responseObject;
+		    }
 			catch (FlurlHttpTimeoutException)
 			{
 				throw new SquareException("timeout", "Request timed out.");
@@ -42,7 +51,28 @@ namespace Claytondus.Square
 			}
 		}
 
-	    protected async Task<T> PostAsync<T>(string resource, object body)
+		protected async Task<T> GetLinkAsync<T>(Url link)
+		{
+			try
+			{
+				return await link
+					.WithDefaults()
+					.WithOAuthBearerToken(_authToken)
+					.GetJsonAsync<T>();
+			}
+			catch (FlurlHttpTimeoutException)
+			{
+				throw new SquareException("timeout", "Request timed out.");
+			}
+			catch (FlurlHttpException ex)
+			{
+				var response = ex.GetResponseJson();
+				var squareEx = new SquareException(response["type"], response["message"]) { HttpStatus = ex.Call.HttpStatus };
+				throw squareEx;
+			}
+		}
+
+		protected async Task<T> PostAsync<T>(string resource, object body)
 	    {
 			try
 			{

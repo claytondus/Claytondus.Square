@@ -14,12 +14,18 @@ namespace Claytondus.Square
 	/// </summary>
 	public class SquareTransactionClient : SquareClient
 	{
+		private readonly string _merchantId;
 		/// <summary>
 		///     Instantiate a client for accessing Square transactions.
 		/// </summary>
 		/// <param name="authToken">Merchant OAuth token or personal access token.</param>
-		public SquareTransactionClient(string authToken) : base(authToken)
+		/// <param name="merchantId">
+		///		Your Square-issued ID, if you've obtained it from another endpoint. 
+		///		If you haven't, specify me for the Connect API to automatically determine your merchant ID based on your request's access token.
+		/// </param>
+		public SquareTransactionClient(string authToken, string merchantId = "me") : base(authToken)
 		{
+			_merchantId = merchantId;
 		}
 
 		/// <summary>
@@ -44,7 +50,7 @@ namespace Claytondus.Square
 		/// </param>
 		/// <returns cref="SquarePayment">List of SquarePayment objects.</returns>
 		/// <exception cref="SquareException">Error returned from Square Connect.</exception>
-		public async Task<List<SquarePayment>> ListPaymentsAsync(DateTimeOffset? begin = null, DateTimeOffset? end = null,
+		public async Task<SquareResponse<List<SquarePayment>>> ListPaymentsAsync(DateTimeOffset? begin = null, DateTimeOffset? end = null,
 			SquareListOrder order = null, int limit = 100)
 		{
 			begin = begin ?? DateTimeOffset.UtcNow.AddYears(-1);
@@ -59,7 +65,7 @@ namespace Claytondus.Square
 				order,
 				limit
 			};
-			return await GetAsync<List<SquarePayment>>("/v1/me/payments", paymentsCriteria);
+			return await GetAsync<List<SquarePayment>>("/v1/" + _merchantId + "/payments", paymentsCriteria);
 		}
 
 		/// <summary>
@@ -72,9 +78,28 @@ namespace Claytondus.Square
 		/// </param>
 		/// <returns>A SquarePayment object that describes the requested payment.</returns>
 		/// <exception cref="SquareException">Error returned from Square Connect.</exception>
-		public async Task<SquarePayment> RetrievePaymentAsync(string paymentId)
+		public async Task<SquareResponse<SquarePayment>> RetrievePaymentAsync(string paymentId)
 		{
-			return await GetAsync<SquarePayment>("/v1/me/payments/" + paymentId);
+			return await GetAsync<SquarePayment>("/v1/" + _merchantId + "/payments/" + paymentId);
 		}
+
+		public async Task<SquareResponse<List<SquareOrder>>> ListOrdersAsync(int limit = 100, SquareListOrder order = null)
+		{
+			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException("limit");
+			order = order ?? SquareListOrder.ASC;
+
+			var ordersCriteria = new
+			{
+				limit,
+				order
+			};
+			return await GetAsync<List<SquareOrder>>("/v1/" + _merchantId + "/orders", ordersCriteria);
+		}
+
+		public async Task<SquareResponse<SquareOrder>> RetrieveOrderAsync(string orderId)
+		{
+			return await GetAsync<SquareOrder>("/v1/" + _merchantId + "/orders/" + orderId);
+		}
+
 	}
 }

@@ -11,6 +11,9 @@ namespace Claytondus.Square.Models
 		[JsonProperty(PropertyName = "quantity")]
 		public decimal Quantity { get; set; }
 
+		[JsonProperty(PropertyName = "itemization_type")]
+		public string ItemizationType { get; set; }
+
 		[JsonProperty(PropertyName = "item_detail")]
 		public SquarePaymentItemDetail ItemDetail { get; set; }
 
