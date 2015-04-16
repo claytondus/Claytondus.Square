@@ -33,7 +33,7 @@ namespace Claytondus.Square.Models
 		public SquareMoney TotalMoney { get; set; }
 
 		[JsonProperty(PropertyName = "tendered_money")]
-		public SquareMoney TenderedsMoney { get; set; }
+		public SquareMoney TenderedMoney { get; set; }
 
 		[JsonProperty(PropertyName = "charge_back_money")]
 		public SquareMoney ChargeBackMoney { get; set; }

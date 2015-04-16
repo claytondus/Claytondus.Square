@@ -32,9 +32,10 @@ namespace Claytondus.Square
 				    .WithDefaults()
 				    .WithOAuthBearerToken(_authToken)
 					.GetAsync();
+			    var responseBody = await response.Content.ReadAsStringAsync();
 			    var responseObject = new SquareResponse<T>
 			    {
-				    Response = JsonConvert.DeserializeObject<T>(response.Content.ToString()),
+				    Response = JsonConvert.DeserializeObject<T>(responseBody),
 				    Link = new Url(response.Headers.First(h => h.Key == "Link").Value.First())
 			    };
 			    return responseObject;

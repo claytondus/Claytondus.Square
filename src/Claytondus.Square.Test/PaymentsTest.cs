@@ -12,13 +12,13 @@ namespace Claytondus.Square.Test
 	[TestClass]
 	public class PaymentsTest
 	{
-		private readonly string _testAuthToken = "Jh0BLak6h3qJhw6ferNj-Q";
+		private readonly string _testAuthToken = "8t7pNBnW9HgPo7_P26wSIA";
 
 		[TestMethod]
 		public async Task ListPaymentsTest()
 		{
 			var client = new SquareTransactionClient(_testAuthToken);
-			var payments = await client.ListPaymentsAsync(DateTime.UtcNow-TimeSpan.FromDays(14), DateTime.UtcNow);
+			var payments = await client.ListPaymentsAsync(DateTime.UtcNow-TimeSpan.FromDays(1), DateTime.UtcNow);
 			Assert.IsNotNull(payments);
 			Trace.Write(JsonConvert.SerializeObject(payments));
 		}
