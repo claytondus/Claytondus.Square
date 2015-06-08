@@ -33,10 +33,22 @@ namespace Claytondus.Square
 				    .WithOAuthBearerToken(_authToken)
 					.GetAsync();
 			    var responseBody = await response.Content.ReadAsStringAsync();
-			    var responseObject = new SquareResponse<T>
+				var settings = new JsonSerializerSettings
+				{
+					Error = (sender, args) =>
+					{
+						if (System.Diagnostics.Debugger.IsAttached)
+						{
+							System.Diagnostics.Debugger.Break();
+						}
+					}
+				};
+			    var responseDeserialized = JsonConvert.DeserializeObject<T>(responseBody, settings);
+			    var linkHeader = response.Headers.FirstOrDefault(h => h.Key == "Link");
+                var responseObject = new SquareResponse<T>
 			    {
-				    Response = JsonConvert.DeserializeObject<T>(responseBody),
-				    Link = new Url(response.Headers.First(h => h.Key == "Link").Value.First())
+				    Response = responseDeserialized,
+				    Link = linkHeader.Value != null ? new Url(linkHeader.Value.First()) : null
 			    };
 			    return responseObject;
 		    }

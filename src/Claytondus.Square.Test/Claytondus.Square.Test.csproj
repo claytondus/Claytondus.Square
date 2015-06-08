@@ -64,6 +64,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AsyncAssertExtension.cs" />
+    <Compile Include="OrdersTest.cs" />
     <Compile Include="PaymentsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
