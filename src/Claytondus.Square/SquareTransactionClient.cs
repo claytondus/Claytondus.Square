@@ -101,5 +101,10 @@ namespace Claytondus.Square
 			return await GetAsync<SquareOrder>("/v1/" + _merchantId + "/orders/" + orderId);
 		}
 
+	    public async Task<SquareOrder> UpdateOrderAsync(string orderId, SquareOrderUpdate update)
+	    {
+	        return await PutAsync<SquareOrder>("/v1/" + _merchantId + "/orders/" + orderId, update);
+	    }
+
 	}
 }
