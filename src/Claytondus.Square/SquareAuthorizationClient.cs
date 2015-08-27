@@ -53,7 +53,7 @@ namespace Claytondus.Square
         }
 
 
-        public async Task RenewTokenAsync(string accessToken, string merchantId)
+        public async Task RevokeTokenAsync(string accessToken, string merchantId)
         {
             var request = new Dictionary<string, string> {{ "client_id", _clientId }};
             
