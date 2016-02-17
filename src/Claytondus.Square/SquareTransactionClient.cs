@@ -56,7 +56,7 @@ namespace Claytondus.Square
 			begin = begin ?? DateTimeOffset.UtcNow.AddYears(-1);
 			end = end ?? DateTimeOffset.UtcNow;
 			order = order ?? SquareListOrder.ASC;
-			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException("limit");
+			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException(nameof(limit));
 
 			var paymentsCriteria = new
 			{
@@ -85,7 +85,7 @@ namespace Claytondus.Square
 
 		public async Task<SquareResponse<List<SquareOrder>>> ListOrdersAsync(int limit = 100, SquareListOrder order = null)
 		{
-			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException("limit");
+			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException(nameof(limit));
 			order = order ?? SquareListOrder.ASC;
 
 			var ordersCriteria = new

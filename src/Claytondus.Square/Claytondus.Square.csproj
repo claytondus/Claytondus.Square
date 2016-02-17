@@ -60,10 +60,12 @@
     <Compile Include="Models\SquareGlobalAddress.cs" />
     <Compile Include="Models\SquareDiscount.cs" />
     <Compile Include="Models\SquareException.cs" />
+    <Compile Include="Models\SquareItemUpdate.cs" />
     <Compile Include="Models\SquareListOrder.cs" />
     <Compile Include="Models\SquareModifier.cs" />
     <Compile Include="Models\SquareOrderHistory.cs" />
     <Compile Include="Models\SquareOrderUpdate.cs" />
+    <Compile Include="Models\SquareItem.cs" />
     <Compile Include="Models\SquarePaymentItemDetail.cs" />
     <Compile Include="Models\SquareResponse.cs" />
     <Compile Include="Models\SquareOAuthToken.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SquareOrder.cs" />
     <Compile Include="SquareAuthorizationClient.cs" />
+    <Compile Include="SquareItemClient.cs" />
     <Compile Include="SquareTransactionClient.cs" />
   </ItemGroup>
   <ItemGroup>

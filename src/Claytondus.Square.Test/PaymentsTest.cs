@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +13,7 @@ namespace Claytondus.Square.Test
 	[TestClass]
 	public class PaymentsTest
 	{
-		private readonly string _testAuthToken = "8t7pNBnW9HgPo7_P26wSIA";
+		private readonly string _testAuthToken = ConfigurationManager.AppSettings["squareToken"];
 
 		[TestMethod]
 		public async Task ListPaymentsTest()
