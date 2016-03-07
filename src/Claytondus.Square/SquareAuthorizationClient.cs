@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Claytondus.Square.Models;
 using Flurl.Http;
@@ -33,7 +34,7 @@ namespace Claytondus.Square
 		{
             try
             {
-                return await SquareUrl
+                return await new Flurl.Url(SquareUrl)
                     .AppendPathSegment("/oauth2/clients/"+_clientId+"/access-token/renew")
                     .WithDefaults()
                     .WithHeader("Authorization","Client "+_clientSecret)
@@ -72,7 +73,7 @@ namespace Claytondus.Square
 
             try
             {
-                await SquareUrl
+                await new Flurl.Url(SquareUrl)
                     .AppendPathSegment("/oauth2/revoke")
                     .WithDefaults()
                     .WithHeader("Authorization", "Client " + _clientSecret)
