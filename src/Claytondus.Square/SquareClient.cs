@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Claytondus.Square.Models;
 using Flurl;
@@ -116,7 +117,31 @@ namespace Claytondus.Square
 			
 	    }
 
-		protected async Task<T> PutAsync<T>(string resource, object body)
+        protected async Task<T> PostAsync<T>(string resource, MultipartFormDataContent content)
+        {
+            Log.Trace("(Multipart) POST " + resource);
+            try
+            {
+                return await new Url(SquareUrl)
+                    .AppendPathSegment(resource)
+                    .WithHeader("Content-Type", "multipart/form-data")
+                    .WithOAuthBearerToken(_authToken)
+                    .PostMultipartAsync(content)
+                    .ReceiveJson<T>();
+            }
+            catch (FlurlHttpTimeoutException)
+            {
+                throw new SquareException("timeout", "Request timed out.");
+            }
+            catch (FlurlHttpException ex)
+            {
+                var response = ex.GetResponseString();
+                var squareEx = new SquareException("error", response) { Method = "POST", Resource = resource, HttpStatus = ex.Call.HttpStatus };
+                throw squareEx;
+            }
+        }
+
+		protected async Task<T> PutAsync<T>(string resource, object body = null)
 		{
             Log.Trace("PUT " + resource);
             try
@@ -141,7 +166,7 @@ namespace Claytondus.Square
             }
 		}
 
-		protected async Task DeleteAsync(string resource, object queryParams)
+		protected async Task DeleteAsync(string resource, object queryParams = null)
 		{
             Log.Trace("DELETE " + resource);
             try

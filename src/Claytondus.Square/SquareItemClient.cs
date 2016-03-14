@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Claytondus.Square.Models;
+using Flurl;
+using Flurl.Http;
+using NLog;
 
 namespace Claytondus.Square
 {
@@ -13,19 +18,36 @@ namespace Claytondus.Square
     /// </summary>
     public class SquareItemClient : SquareClient
 	{
-		private readonly string _merchantId;
-		/// <summary>
-		///     Instantiate a client for accessing Square transactions.
-		/// </summary>
-		/// <param name="authToken">Merchant OAuth token or personal access token.</param>
-		/// <param name="merchantId">
-		///		Your Square-issued ID, if you've obtained it from another endpoint. 
-		///		If you haven't, specify me for the Connect API to automatically determine your merchant ID based on your request's access token.
-		/// </param>
-		public SquareItemClient(string authToken, string merchantId = "me") : base(authToken)
+		private readonly string _locationId;
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        ///     Instantiate a client for accessing Square transactions.
+        /// </summary>
+        /// <param name="authToken">Merchant OAuth token or personal access token.</param>
+        /// <param name="locationId">
+        ///		Your Square-issued ID, if you've obtained it from another endpoint. 
+        ///		If you haven't, specify me for the Connect API to automatically determine your location ID based on your request's access token.
+        /// </param>
+        public SquareItemClient(string authToken, string locationId = "me") : base(authToken)
 		{
-			_merchantId = merchantId;
+			_locationId = locationId;
 		}
+
+        public async Task<SquareItem> CreateItemAsync(SquareItem item)
+        {
+            return await PostAsync<SquareItem>("/v1/" + _locationId + "/items", item);
+        }
+
+        public async Task<SquareResponse<List<SquareItem>>> ListItemsAsync()
+        {
+            return await GetAsync<List<SquareItem>>("/v1/" + _locationId + "/items");
+        }
+
+        public async Task<SquareResponse<SquareItem>> RetrieveItemAsync(string itemId)
+        {
+            return await GetAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId);
+        }
 
         /// <summary>
         ///     Modifies the core details of an existing item.
@@ -38,10 +60,38 @@ namespace Claytondus.Square
         /// <exception cref="SquareException">Error returned from Square Connect.</exception>
         public async Task<SquareItem> UpdateItemAsync(string itemId, SquareItemUpdate item)
 		{
-			return await PutAsync<SquareItem>("/v1/" + _merchantId + "/items/" + itemId, item);
+			return await PutAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId, item);
 		}
 
+        public async Task DeleteItemAsync(string itemId)
+        {
+            await DeleteAsync("/v1/" + _locationId + "/items/" + itemId);
+        }
+
+        public async Task<SquareItemImage> UploadItemImageAsync(string itemId, byte[] imageData, string mimeType)
+        {
+            var requestContent = new MultipartFormDataContent();
+            var imageContent = new ByteArrayContent(imageData);
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(mimeType);
+            requestContent.Add(imageContent, "image_data", "image.jpg");
+
+            var resource = "/v1/" + _locationId + "/items/" + itemId + "/image";
+            return await PostAsync<SquareItemImage>(resource, requestContent);
+        }
+
+        /// <summary>
+        ///     Associates a modifier list with an item, meaning modifier options from the list can be applied to the item.
+        ///     Required permissions: ITEMS_WRITE
+        /// </summary>
+        /// <returns cref="SquareItem">Item object that represents the updated item.</returns>
+        /// <exception cref="SquareException">Error returned from Square Connect.</exception>
+        public async Task<SquareItem> ApplyModifierListAsync(string itemId, string modifierListId)
+        {
+            return await PutAsync<SquareItem>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
+        }
 
 
-	}
+
+    }
 }

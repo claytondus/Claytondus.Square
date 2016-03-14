@@ -2,7 +2,7 @@
 
 namespace Claytondus.Square.Models
 {
-	public class SquareDiscount
+	public class SquarePaymentDiscount
 	{
 		[JsonProperty(PropertyName = "name")]
 		public string Name { get; set; }

@@ -42,9 +42,9 @@ namespace Claytondus.Square.Models
 		public IEnumerable<SquarePaymentTax> Taxes { get; set; }
 		
 		[JsonProperty(PropertyName = "discounts")]
-		public IEnumerable<SquareDiscount> Discounts { get; set; }
+		public IEnumerable<SquarePaymentDiscount> Discounts { get; set; }
 
 		[JsonProperty(PropertyName = "modifiers")]
-		public IEnumerable<SquareModifier> Modifiers { get; set; }
+		public IEnumerable<SquarePaymentModifier> Modifiers { get; set; }
 	}
 }
