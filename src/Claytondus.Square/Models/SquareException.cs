@@ -11,6 +11,7 @@ namespace Claytondus.Square.Models
 		public SquareException(string type, string message) : base(message)
 		{
 			SquareType = type;
+		    ResponseBody = message;
 		}
 
 		protected SquareException(SerializationInfo info, StreamingContext context)
@@ -18,6 +19,7 @@ namespace Claytondus.Square.Models
 		}
 
 		public string SquareType { get; set; }
+        public string ResponseBody { get; set; }
 
 		public HttpStatusCode? HttpStatus { get; set; }
 
