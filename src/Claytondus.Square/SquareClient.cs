@@ -92,16 +92,18 @@ namespace Claytondus.Square
 			}
 		}
 
-		protected async Task<T> PostAsync<T>(string resource, object body)
+		protected async Task<T> PostAsync<T>(string resource, object body, string authenticator = "")
 	    {
             Log.Trace("POST " + resource);
             try
 			{
-				return await new Url(SquareUrl)
+				var request =  new Url(SquareUrl)
                     .AppendPathSegment(resource)
-					.WithDefaults()
-					.WithOAuthBearerToken(_authToken)
-					.PostJsonAsync(body)
+					.WithDefaults();
+			    request = authenticator == string.Empty
+                    ? request.WithOAuthBearerToken(_authToken) 
+                    : request.WithHeader("Authorization", authenticator);
+			    return await request.PostJsonAsync(body)
 					.ReceiveJson<T>();
 			}
 			catch (FlurlHttpTimeoutException)
