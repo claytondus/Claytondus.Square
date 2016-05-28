@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Claytondus.Square.Logging;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json;
-using NLog;
 
 namespace Claytondus.Square
 {
@@ -14,7 +14,7 @@ namespace Claytondus.Square
     {
 	    protected readonly string SquareUrl = "https://connect.squareup.com";
 	    private readonly string _authToken;
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
         public SquareClient()
 		{
@@ -50,10 +50,11 @@ namespace Claytondus.Square
 				};
 			    var responseDeserialized = JsonConvert.DeserializeObject<T>(responseBody, settings);
 			    var linkHeader = response.Headers.FirstOrDefault(h => h.Key == "Link");
+		        var link = linkHeader.Value?.FirstOrDefault() ?? string.Empty;
                 var responseObject = new SquareResponse<T>
 			    {
 				    Response = responseDeserialized,
-				    Link = linkHeader.Value != null ? new Url(linkHeader.Value.First()) : null
+				    Link = link
 			    };
 			    return responseObject;
 		    }

@@ -15,7 +15,7 @@ namespace Claytondus.Square.Models
 		public string Name { get; set; }
 
 		[JsonProperty(PropertyName = "receipt_url")]
-		public Url ReceiptUrl { get; set; }
+		public string ReceiptUrl { get; set; }
 
 		[JsonProperty(PropertyName = "card_brand")]
 		public string CardBrand { get; set; }

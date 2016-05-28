@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Claytondus.Square.Logging;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
-using NLog;
 
 namespace Claytondus.Square
 {
@@ -19,7 +19,7 @@ namespace Claytondus.Square
     public class SquareItemClient : SquareClient
 	{
 		private readonly string _locationId;
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
         /// <summary>
         ///     Instantiate a client for accessing Square transactions.
