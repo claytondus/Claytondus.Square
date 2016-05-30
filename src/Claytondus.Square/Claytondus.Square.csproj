@@ -72,6 +72,7 @@
     <Compile Include="Models\SquarePaymentItemDetail.cs" />
     <Compile Include="Models\SquareResponse.cs" />
     <Compile Include="Models\SquareOAuthToken.cs" />
+    <Compile Include="SquareCategoryClient.cs" />
     <Compile Include="SquareClient.cs" />
     <Compile Include="Models\SquareDevice.cs" />
     <Compile Include="Models\SquareMoney.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Models\SquareOrder.cs" />
     <Compile Include="SquareAuthorizationClient.cs" />
     <Compile Include="SquareBatchClient.cs" />
+    <Compile Include="SquareFeeClient.cs" />
     <Compile Include="SquareModifierOptionClient.cs" />
     <Compile Include="SquareModifierListClient.cs" />
     <Compile Include="SquareItemClient.cs" />

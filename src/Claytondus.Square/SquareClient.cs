@@ -169,18 +169,20 @@ namespace Claytondus.Square
             }
 		}
 
-		protected async Task DeleteAsync(string resource, object queryParams = null)
+		protected async Task<T> DeleteAsync<T>(string resource, object queryParams = null)
 		{
             Log.Trace("DELETE " + resource);
             try
-			{
-				await new Url(SquareUrl)
+            {
+                var response = await new Url(SquareUrl)
                     .AppendPathSegment(resource)
-					.SetQueryParams(queryParams)
-					.WithDefaults()
-					.WithOAuthBearerToken(_authToken)
-					.DeleteAsync();
-			}
+                    .SetQueryParams(queryParams)
+                    .WithDefaults()
+                    .WithOAuthBearerToken(_authToken)
+                    .DeleteAsync()
+                    .ReceiveJson<T>();
+                return response;
+            }
 			catch (FlurlHttpTimeoutException)
 			{
 				throw new SquareException("timeout", "Request timed out.");

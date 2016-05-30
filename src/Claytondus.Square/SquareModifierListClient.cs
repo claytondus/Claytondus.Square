@@ -35,5 +35,19 @@ namespace Claytondus.Square
             return await PostAsync<SquareModifierList>("/v1/" + _locationId + "/modifier-lists", list);
 		}
 
-	}
+        public async Task<SquareResponse<List<SquareModifierList>>> ListModifierListsAsync()
+        {
+            return await GetAsync<List<SquareModifierList>>("/v1/" + _locationId + "/modifier-lists");
+        }
+
+        public async Task<SquareResponse<SquareModifierList>> RetrieveModifierListAsync(string modifierListId)
+        {
+            return await GetAsync<SquareModifierList>("/v1/" + _locationId + "/modifier-lists/" + modifierListId);
+        }
+
+        public async Task DeleteModifierListAsync(string modifierListId)
+        {
+            await DeleteAsync<string>("/v1/" + _locationId + "/modifier-lists/" + modifierListId);
+        }
+    }
 }

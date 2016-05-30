@@ -65,7 +65,7 @@ namespace Claytondus.Square
 
         public async Task DeleteItemAsync(string itemId)
         {
-            await DeleteAsync("/v1/" + _locationId + "/items/" + itemId);
+            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId);
         }
 
         public async Task<SquareItemImage> UploadItemImageAsync(string itemId, byte[] imageData, string mimeType)
@@ -77,6 +77,21 @@ namespace Claytondus.Square
 
             var resource = "/v1/" + _locationId + "/items/" + itemId + "/image";
             return await PostAsync<SquareItemImage>(resource, requestContent);
+        }
+
+        public async Task<SquareItem> CreateVariationAsync(string itemId, SquareItemVariation variation)
+        {
+            return await PostAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId + "/variations", variation);
+        }
+
+        public async Task<SquareItem> UpdateVariationAsync(string itemId, string variationId, SquareItemVariation variation)
+        {
+            return await PutAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId, variation);
+        }
+
+        public async Task DeleteVariationAsync(string itemId, string variationId)
+        {
+            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId);
         }
 
         /// <summary>
@@ -91,7 +106,23 @@ namespace Claytondus.Square
                 "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
         }
 
+        public async Task<SquareItem> RemoveModifierListAsync(string itemId, string modifierListId)
+        {
+            return await DeleteAsync<SquareItem>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
+        }
 
+        public async Task<SquareItem> ApplyFeeAsync(string itemId, string feeId)
+        {
+            return await PutAsync<SquareItem>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId);
+        }
+
+        public async Task<SquareItem> RemoveFeeAsync(string itemId, string feeId)
+        {
+            return await DeleteAsync<SquareItem>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId);
+        }
 
     }
 }
