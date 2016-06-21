@@ -48,5 +48,6 @@ namespace Claytondus.Square.Test
 			Assert.AreEqual(expectedType, ex.SquareType);
 			Trace.Write(ex.SquareType);
 		}
+
 	}
 }

@@ -7,6 +7,7 @@ using Claytondus.Square.Logging;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
+using Newtonsoft.Json.Linq;
 
 namespace Claytondus.Square
 {
@@ -34,7 +35,7 @@ namespace Claytondus.Square
 			_locationId = locationId;
 		}
 
-        public async Task<SquareItem> CreateItemAsync(SquareItem item)
+        public async Task<SquareItem> CreateItemAsync(SquareItemCreate item)
         {
             return await PostAsync<SquareItem>("/v1/" + _locationId + "/items", item);
         }
@@ -100,28 +101,28 @@ namespace Claytondus.Square
         /// </summary>
         /// <returns cref="SquareItem">Item object that represents the updated item.</returns>
         /// <exception cref="SquareException">Error returned from Square Connect.</exception>
-        public async Task<SquareItem> ApplyModifierListAsync(string itemId, string modifierListId)
+        public async Task<object> ApplyModifierListAsync(string itemId, string modifierListId)
         {
-            return await PutAsync<SquareItem>(
-                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
+            return await PutAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId, new JObject());
         }
 
-        public async Task<SquareItem> RemoveModifierListAsync(string itemId, string modifierListId)
+        public async Task<object> RemoveModifierListAsync(string itemId, string modifierListId)
         {
-            return await DeleteAsync<SquareItem>(
-                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
+            return await DeleteAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId, new JObject());
         }
 
-        public async Task<SquareItem> ApplyFeeAsync(string itemId, string feeId)
+        public async Task<object> ApplyFeeAsync(string itemId, string feeId)
         {
-            return await PutAsync<SquareItem>(
-                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId);
+            return await PutAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId, new JObject());
         }
 
-        public async Task<SquareItem> RemoveFeeAsync(string itemId, string feeId)
+        public async Task<object> RemoveFeeAsync(string itemId, string feeId)
         {
-            return await DeleteAsync<SquareItem>(
-                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId);
+            return await DeleteAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId, new JObject());
         }
 
     }
