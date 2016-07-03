@@ -16,7 +16,7 @@ namespace Claytondus.Square.Models
         public string TokenType { get; set; }
 
         [JsonProperty(PropertyName = "expires_at")]
-        public DateTimeOffset ExpiresAt { get; set; }
+        public DateTime ExpiresAt { get; set; }
 
         [JsonProperty(PropertyName = "merchant_id")]
         public string MerchantId { get; set; }

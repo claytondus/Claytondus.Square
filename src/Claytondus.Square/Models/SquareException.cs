@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Claytondus.Square.Models
@@ -11,18 +10,18 @@ namespace Claytondus.Square.Models
 		public SquareException(string type, string message) : base(message)
 		{
 			SquareType = type;
-		}
-
-		protected SquareException(SerializationInfo info, StreamingContext context)
-		{
+		    ResponseBody = message;
 		}
 
 		public string SquareType { get; set; }
+        public string RequestBody { get; set; }
+        public string ResponseBody { get; set; }
 
 		public HttpStatusCode? HttpStatus { get; set; }
 
         public string Method { get; set; }
         public string Resource { get; set; }
+        public string HttpMessage { get; set; }
 
 
 	}

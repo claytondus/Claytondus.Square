@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Claytondus.Square.Models;
-using Flurl.Http;
 
 namespace Claytondus.Square
 {
@@ -29,28 +26,32 @@ namespace Claytondus.Square
 		    _clientSecret = clientSecret;
 		}
 
+	    public string GetAuthorizeUrl(string csrfToken)
+	    {
+	        return SquareUrl 
+                + @"/oauth2/authorize"
+                + @"?client_id=" + _clientId
+                + @"&response_type=code"
+                + @"&scope=MERCHANT_PROFILE_READ ITEMS_READ ITEMS_WRITE PAYMENTS_READ ORDERS_READ ORDERS_WRITE"
+                + @"&state=" + csrfToken;
+        }
 
-		public async Task<SquareOAuthToken> RenewTokenAsync(string accessToken)
+	    public async Task<SquareOAuthToken> ObtainTokenAsync(string code)
+	    {
+	        var request = new
+	        {
+	            client_id = _clientId,
+	            client_secret = _clientSecret,
+	            code = code
+	        };
+	        return await PostAsync<SquareOAuthToken>("/oauth2/token", request, " ");
+	    }
+
+        public async Task<SquareOAuthToken> RenewTokenAsync(string accessToken)
 		{
-            try
-            {
-                return await new Flurl.Url(SquareUrl)
-                    .AppendPathSegment("/oauth2/clients/"+_clientId+"/access-token/renew")
-                    .WithDefaults()
-                    .WithHeader("Authorization","Client "+_clientSecret)
-                    .PostJsonAsync(new {access_token = accessToken})
-                    .ReceiveJson<SquareOAuthToken>();
-            }
-            catch (FlurlHttpTimeoutException)
-            {
-                throw new SquareException("timeout", "Request timed out.");
-            }
-            catch (FlurlHttpException ex)
-            {
-                var squareEx = ex.GetResponseJson<SquareException>();
-                squareEx.HttpStatus = ex.Call.HttpStatus;
-                throw squareEx;
-            }
+		    return await
+		        PostAsync<SquareOAuthToken>("/oauth2/clients/" + _clientId + "/access-token/renew",
+		            new {access_token = accessToken}, "Client " + _clientSecret);
         }
 
 
@@ -71,25 +72,7 @@ namespace Claytondus.Square
                 throw new ArgumentException("Provide either an accessToken or merchantId, but not both.");
             }
 
-            try
-            {
-                await new Flurl.Url(SquareUrl)
-                    .AppendPathSegment("/oauth2/revoke")
-                    .WithDefaults()
-                    .WithHeader("Authorization", "Client " + _clientSecret)
-                    .PostJsonAsync(request)
-                    .ReceiveJson();
-            }
-            catch (FlurlHttpTimeoutException)
-            {
-                throw new SquareException("timeout", "Request timed out.");
-            }
-            catch (FlurlHttpException ex)
-            {
-                var squareEx = ex.GetResponseJson<SquareException>();
-                squareEx.HttpStatus = ex.Call.HttpStatus;
-                throw squareEx;
-            }
+            await PostAsync<object>("/oauth2/revoke", request, "Client " + _clientSecret);
         }
 
     }

@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Claytondus.Square.Logging;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
 using Newtonsoft.Json;
-using NLog;
 
 namespace Claytondus.Square
 {
@@ -14,7 +16,7 @@ namespace Claytondus.Square
     {
 	    protected readonly string SquareUrl = "https://connect.squareup.com";
 	    private readonly string _authToken;
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.For<SquareClient>();
 
         public SquareClient()
 		{
@@ -50,10 +52,11 @@ namespace Claytondus.Square
 				};
 			    var responseDeserialized = JsonConvert.DeserializeObject<T>(responseBody, settings);
 			    var linkHeader = response.Headers.FirstOrDefault(h => h.Key == "Link");
+		        var link = linkHeader.Value?.FirstOrDefault() ?? string.Empty;
                 var responseObject = new SquareResponse<T>
 			    {
 				    Response = responseDeserialized,
-				    Link = linkHeader.Value != null ? new Url(linkHeader.Value.First()) : null
+				    Link = link
 			    };
 			    return responseObject;
 		    }
@@ -63,8 +66,8 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.GetResponseString();
-                var squareEx = new SquareException("error", response) { Method = "GET", Resource = resource, HttpStatus = ex.Call.HttpStatus };
+			    var response = ex.Call.ErrorResponseBody;
+                var squareEx = new SquareException("error", response) { Method = "GET", Resource = resource, HttpStatus = ex.Call.HttpStatus};
                 throw squareEx;
             }
 		}
@@ -86,22 +89,24 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-				var response = ex.GetResponseString();
+				var response = ex.Call.ErrorResponseBody;
 				var squareEx = new SquareException("error", response) { Method = "GET", Resource = link, HttpStatus = ex.Call.HttpStatus };
 				throw squareEx;
 			}
 		}
 
-		protected async Task<T> PostAsync<T>(string resource, object body)
+		protected async Task<T> PostAsync<T>(string resource, object body, string authenticator = "")
 	    {
             Log.Trace("POST " + resource);
             try
 			{
-				return await new Url(SquareUrl)
+				var request =  new Url(SquareUrl)
                     .AppendPathSegment(resource)
-					.WithDefaults()
-					.WithOAuthBearerToken(_authToken)
-					.PostJsonAsync(body)
+					.WithDefaults();
+			    request = authenticator == string.Empty
+                    ? request.WithOAuthBearerToken(_authToken) 
+                    : request.WithHeader("Authorization", authenticator);
+			    return await request.PostJsonAsync(body)
 					.ReceiveJson<T>();
 			}
 			catch (FlurlHttpTimeoutException)
@@ -110,8 +115,8 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.GetResponseString();
-                var squareEx = new SquareException("error", response) { Method = "POST", Resource = resource, HttpStatus = ex.Call.HttpStatus };
+                var response = ex.Call.ErrorResponseBody;
+                var squareEx = new SquareException("error", response) { Method = "POST", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message, RequestBody = ex.Call.RequestBody};
                 throw squareEx;
             }
 			
@@ -122,22 +127,17 @@ namespace Claytondus.Square
             Log.Trace("(Multipart) POST " + resource);
             try
             {
-                return await new Url(SquareUrl)
-                    .AppendPathSegment(resource)
-                    .WithHeader("Content-Type", "multipart/form-data")
-                    .WithOAuthBearerToken(_authToken)
-                    .PostMultipartAsync(content)
-                    .ReceiveJson<T>();
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",_authToken);
+                var response = await client.PostAsync(SquareUrl + resource, content);
+                var responseText = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<T>(responseText);
+                return responseObj;
             }
-            catch (FlurlHttpTimeoutException)
+            catch (Exception ex)
             {
-                throw new SquareException("timeout", "Request timed out.");
-            }
-            catch (FlurlHttpException ex)
-            {
-                var response = ex.GetResponseString();
-                var squareEx = new SquareException("error", response) { Method = "POST", Resource = resource, HttpStatus = ex.Call.HttpStatus };
-                throw squareEx;
+                Console.Write(ex.StackTrace);
+                throw ex;
             }
         }
 
@@ -160,35 +160,61 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.GetResponseString();
-                var squareEx = new SquareException("error", response) { Method = "PUT", Resource = resource, HttpStatus = ex.Call.HttpStatus };
+                var response = ex.Call.ErrorResponseBody;
+                var squareEx = new SquareException("error", response) { Method = "PUT", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message, RequestBody = ex.Call.RequestBody };
                 throw squareEx;
             }
 		}
 
-		protected async Task DeleteAsync(string resource, object queryParams = null)
+        protected async Task DeleteAsync(string resource, object queryParams = null)
+        {
+            Log.Trace("DELETE " + resource);
+            try
+            {
+                await new Url(SquareUrl)
+                    .AppendPathSegment(resource)
+                    .SetQueryParams(queryParams)
+                    .WithDefaults()
+                    .WithOAuthBearerToken(_authToken)
+                    .DeleteAsync();
+            }
+            catch (FlurlHttpTimeoutException)
+            {
+                throw new SquareException("timeout", "Request timed out.");
+            }
+            catch (FlurlHttpException ex)
+            {
+                var response = ex.Call.ErrorResponseBody;
+                var squareEx = new SquareException("error", response) { Method = "DELETE", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message };
+                throw squareEx;
+            }
+        }
+
+        protected async Task<T> DeleteAsync<T>(string resource, object queryParams = null)
 		{
             Log.Trace("DELETE " + resource);
             try
-			{
-				await new Url(SquareUrl)
+            {
+                var response = await new Url(SquareUrl)
                     .AppendPathSegment(resource)
-					.SetQueryParams(queryParams)
-					.WithDefaults()
-					.WithOAuthBearerToken(_authToken)
-					.DeleteAsync();
-			}
+                    .SetQueryParams(queryParams)
+                    .WithDefaults()
+                    .WithOAuthBearerToken(_authToken)
+                    .DeleteAsync()
+                    .ReceiveJson<T>();
+                return response;
+            }
 			catch (FlurlHttpTimeoutException)
 			{
 				throw new SquareException("timeout", "Request timed out.");
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.GetResponseString();
-                var squareEx = new SquareException("error", response) { Method = "DELETE", Resource = resource, HttpStatus = ex.Call.HttpStatus };
+                var response = ex.Call.ErrorResponseBody;
+                var squareEx = new SquareException("error", response) { Method = "DELETE", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message };
                 throw squareEx;
             }
-		}
+        }
 	}
 
 	public static class UrlExtension

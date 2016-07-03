@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Claytondus.Square.Logging;
 using Claytondus.Square.Models;
 using Flurl;
 using Flurl.Http;
-using NLog;
+using Newtonsoft.Json.Linq;
 
 namespace Claytondus.Square
 {
@@ -19,7 +20,7 @@ namespace Claytondus.Square
     public class SquareItemClient : SquareClient
 	{
 		private readonly string _locationId;
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.For<SquareItemClient>();
 
         /// <summary>
         ///     Instantiate a client for accessing Square transactions.
@@ -34,7 +35,7 @@ namespace Claytondus.Square
 			_locationId = locationId;
 		}
 
-        public async Task<SquareItem> CreateItemAsync(SquareItem item)
+        public async Task<SquareItem> CreateItemAsync(SquareItemCreate item)
         {
             return await PostAsync<SquareItem>("/v1/" + _locationId + "/items", item);
         }
@@ -79,19 +80,50 @@ namespace Claytondus.Square
             return await PostAsync<SquareItemImage>(resource, requestContent);
         }
 
+        public async Task<SquareItem> CreateVariationAsync(string itemId, SquareItemVariation variation)
+        {
+            return await PostAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId + "/variations", variation);
+        }
+
+        public async Task<SquareItem> UpdateVariationAsync(string itemId, string variationId, SquareItemVariation variation)
+        {
+            return await PutAsync<SquareItem>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId, variation);
+        }
+
+        public async Task DeleteVariationAsync(string itemId, string variationId)
+        {
+            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId);
+        }
+
         /// <summary>
         ///     Associates a modifier list with an item, meaning modifier options from the list can be applied to the item.
         ///     Required permissions: ITEMS_WRITE
         /// </summary>
         /// <returns cref="SquareItem">Item object that represents the updated item.</returns>
         /// <exception cref="SquareException">Error returned from Square Connect.</exception>
-        public async Task<SquareItem> ApplyModifierListAsync(string itemId, string modifierListId)
+        public async Task<object> ApplyModifierListAsync(string itemId, string modifierListId)
         {
-            return await PutAsync<SquareItem>(
-                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId);
+            return await PutAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId, new JObject());
         }
 
+        public async Task<object> RemoveModifierListAsync(string itemId, string modifierListId)
+        {
+            return await DeleteAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/modifier-lists/" + modifierListId, new JObject());
+        }
 
+        public async Task<object> ApplyFeeAsync(string itemId, string feeId)
+        {
+            return await PutAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId, new JObject());
+        }
+
+        public async Task<object> RemoveFeeAsync(string itemId, string feeId)
+        {
+            return await DeleteAsync<object>(
+                "/v1/" + _locationId + "/items/" + itemId + "/fees/" + feeId, new JObject());
+        }
 
     }
 }

@@ -26,10 +26,10 @@ namespace Claytondus.Square.Models
 		public SquareDevice Device { get; set; }
 
 		[JsonProperty(PropertyName = "payment_url")]
-		public Url PaymentUrl { get; set; }
+		public string PaymentUrl { get; set; }
 
 		[JsonProperty(PropertyName = "receipt_url")]
-		public Url ReceiptUrl { get; set; }
+		public string ReceiptUrl { get; set; }
 
 		[JsonProperty(PropertyName = "inclusive_tax_money")]
 		public SquareMoney InclusiveTaxMoney { get; set; }

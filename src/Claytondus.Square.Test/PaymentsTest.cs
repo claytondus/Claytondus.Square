@@ -28,8 +28,9 @@ namespace Claytondus.Square.Test
 		public async Task RetrievePaymentTest()
 		{
 			var client = new SquareTransactionClient(_testAuthToken);
-			var payment = await client.RetrievePaymentAsync("e9b62dfe-4d42-45bf-8ecb-a43a12c3f4df");
-			Assert.IsNotNull(payment);
+			var payment = await client.RetrievePaymentAsync("LcHEQNuVkSCs8IBGxMVwCyMF");
+
+            Assert.IsNotNull(payment);
 			Trace.Write(JsonConvert.SerializeObject(payment));
 		}
 
@@ -47,5 +48,6 @@ namespace Claytondus.Square.Test
 			Assert.AreEqual(expectedType, ex.SquareType);
 			Trace.Write(ex.SquareType);
 		}
+
 	}
 }
