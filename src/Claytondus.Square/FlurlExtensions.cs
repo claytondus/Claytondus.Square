@@ -31,7 +31,8 @@ namespace Claytondus.Square
         // chain off an existing FlurlClient:
         public static async Task<HttpResponseMessage> PostMultipartAsync(this FlurlClient fc, MultipartFormDataContent content)
         {
-            return await fc.HttpClient.PostAsync(fc.Url, content);
+            var client = fc.HttpClient;
+            return await client.PostAsync(fc.Url, content);
         }
 
         // chain off a Url object:

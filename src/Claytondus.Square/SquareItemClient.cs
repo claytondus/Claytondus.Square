@@ -66,7 +66,7 @@ namespace Claytondus.Square
 
         public async Task DeleteItemAsync(string itemId)
         {
-            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId);
+            await DeleteAsync("/v1/" + _locationId + "/items/" + itemId);
         }
 
         public async Task<SquareItemImage> UploadItemImageAsync(string itemId, byte[] imageData, string mimeType)
