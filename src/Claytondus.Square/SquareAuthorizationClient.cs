@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Claytondus.Square.Models;
-using Flurl.Http;
 
 namespace Claytondus.Square
 {

@@ -16,7 +16,7 @@ namespace Claytondus.Square
     {
 	    protected readonly string SquareUrl = "https://connect.squareup.com";
 	    private readonly string _authToken;
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.For<SquareClient>();
 
         public SquareClient()
 		{

@@ -20,7 +20,7 @@ namespace Claytondus.Square
     public class SquareItemClient : SquareClient
 	{
 		private readonly string _locationId;
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.For<SquareItemClient>();
 
         /// <summary>
         ///     Instantiate a client for accessing Square transactions.
