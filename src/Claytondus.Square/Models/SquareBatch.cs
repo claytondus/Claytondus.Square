@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Flurl.Http.Testing;
 using Newtonsoft.Json;
 
 namespace Claytondus.Square.Models
@@ -38,5 +39,6 @@ namespace Claytondus.Square.Models
 
         [JsonProperty(PropertyName = "request_id")]
         public string RequestId { get; set; }
+
     }
 }

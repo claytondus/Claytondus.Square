@@ -103,9 +103,9 @@ namespace Claytondus.Square
 				var request =  new Url(SquareUrl)
                     .AppendPathSegment(resource)
 					.WithDefaults();
-			    request = authenticator == string.Empty
-                    ? request.WithOAuthBearerToken(_authToken) 
-                    : request.WithHeader("Authorization", authenticator);
+			    request = (FlurlClient) (authenticator == string.Empty
+			        ? request.WithOAuthBearerToken(_authToken) 
+			        : request.WithHeader("Authorization", authenticator));
 			    return await request.PostJsonAsync(body)
 					.ReceiveJson<T>();
 			}
@@ -221,9 +221,9 @@ namespace Claytondus.Square
 	{
 		public static FlurlClient WithDefaults(this Url url)
 		{
-			return url
-				.WithTimeout(10)
-				.WithHeader("Accept", "application/json");
+			return (FlurlClient) url
+			    .WithTimeout(10)
+			    .WithHeader("Accept", "application/json");
 		}
 	}
 }

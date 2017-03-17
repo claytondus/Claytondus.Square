@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F5713A6B-CB67-44E3-A94D-FF5462C03DE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{450CDC7A-F4DD-4827-AFBC-6E94D76D7615}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Claytondus.Square", "src\Claytondus.Square\Claytondus.Square.xproj", "{A69DC54E-DF9D-4584-82C2-7DD53C55F696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square", "src\Claytondus.Square\Claytondus.Square.csproj", "{CD828007-91EC-42D2-860A-228AD81A8B97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,15 +15,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A69DC54E-DF9D-4584-82C2-7DD53C55F696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A69DC54E-DF9D-4584-82C2-7DD53C55F696}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A69DC54E-DF9D-4584-82C2-7DD53C55F696}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A69DC54E-DF9D-4584-82C2-7DD53C55F696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD828007-91EC-42D2-860A-228AD81A8B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD828007-91EC-42D2-860A-228AD81A8B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD828007-91EC-42D2-860A-228AD81A8B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD828007-91EC-42D2-860A-228AD81A8B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A69DC54E-DF9D-4584-82C2-7DD53C55F696} = {F5713A6B-CB67-44E3-A94D-FF5462C03DE5}
+		{CD828007-91EC-42D2-860A-228AD81A8B97} = {F5713A6B-CB67-44E3-A94D-FF5462C03DE5}
 	EndGlobalSection
 EndGlobal

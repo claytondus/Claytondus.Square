@@ -92,7 +92,7 @@ namespace Claytondus.Square
 
         public async Task DeleteVariationAsync(string itemId, string variationId)
         {
-            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId);
+            await DeleteAsync<string>("/v1/" + _locationId + "/items/" + itemId + "/variations/" + variationId, new JObject());
         }
 
         /// <summary>
