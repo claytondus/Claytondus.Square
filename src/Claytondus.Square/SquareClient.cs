@@ -29,7 +29,7 @@ namespace Claytondus.Square
 
 	    protected async Task<SquareResponse<T>> GetAsync<T>(string resource, object queryParams = null) where T : class
 	    {
-            Log.Trace("GET " + resource);
+            Log.Debug("GET " + resource);
 		    try
 		    {
 			    var response = await new Url(SquareUrl)
@@ -38,7 +38,7 @@ namespace Claytondus.Square
 				    .WithDefaults()
 				    .WithOAuthBearerToken(_authToken)
 					.GetAsync();
-                Log.Trace(response.RequestMessage.ToString);
+                Log.Debug(response.RequestMessage.ToString);
 			    var responseBody = await response.Content.ReadAsStringAsync();
 				var settings = new JsonSerializerSettings
 				{
@@ -74,7 +74,7 @@ namespace Claytondus.Square
 
 		protected async Task<T> GetLinkAsync<T>(Url link)
 		{
-            Log.Trace("GET " + link);
+            Log.Debug("GET " + link);
             try
 			{
 				var response = await link
@@ -97,13 +97,13 @@ namespace Claytondus.Square
 
 		protected async Task<T> PostAsync<T>(string resource, object body, string authenticator = "")
 	    {
-            Log.Trace("POST " + resource);
+            Log.Debug("POST " + resource);
             try
 			{
-				var request =  new Url(SquareUrl)
+				var request = new Url(SquareUrl)
                     .AppendPathSegment(resource)
 					.WithDefaults();
-			    request = (FlurlClient) (authenticator == string.Empty
+			    request = (authenticator == string.Empty
 			        ? request.WithOAuthBearerToken(_authToken) 
 			        : request.WithHeader("Authorization", authenticator));
 			    return await request.PostJsonAsync(body)
@@ -124,7 +124,7 @@ namespace Claytondus.Square
 
         protected async Task<T> PostAsync<T>(string resource, MultipartFormDataContent content)
         {
-            Log.Trace("(Multipart) POST " + resource);
+            Log.Debug("(Multipart) POST " + resource);
             try
             {
                 var client = new HttpClient();
@@ -143,7 +143,7 @@ namespace Claytondus.Square
 
 		protected async Task<T> PutAsync<T>(string resource, object body = null)
 		{
-            Log.Trace("PUT " + resource);
+            Log.Debug("PUT " + resource);
             try
 			{
 				var response = await new Url(SquareUrl)
@@ -168,7 +168,7 @@ namespace Claytondus.Square
 
         protected async Task DeleteAsync(string resource, object queryParams = null)
         {
-            Log.Trace("DELETE " + resource);
+            Log.Debug("DELETE " + resource);
             try
             {
                 await new Url(SquareUrl)
@@ -192,7 +192,7 @@ namespace Claytondus.Square
 
         protected async Task<T> DeleteAsync<T>(string resource, object queryParams = null)
 		{
-            Log.Trace("DELETE " + resource);
+            Log.Debug("DELETE " + resource);
             try
             {
                 var response = await new Url(SquareUrl)
@@ -219,9 +219,9 @@ namespace Claytondus.Square
 
 	public static class UrlExtension
 	{
-		public static FlurlClient WithDefaults(this Url url)
+		public static IFlurlClient WithDefaults(this Url url)
 		{
-			return (FlurlClient) url
+			return url
 			    .WithTimeout(10)
 			    .WithHeader("Accept", "application/json");
 		}

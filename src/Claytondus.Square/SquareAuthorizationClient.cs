@@ -20,7 +20,7 @@ namespace Claytondus.Square
 	    ///  </summary>
 	    /// <param name="clientId"></param>
 	    /// <param name="clientSecret"></param>
-	    public SquareAuthorizationClient(string clientId = "", string clientSecret = "") 
+	    public SquareAuthorizationClient(string clientId, string clientSecret) 
 		{
 			_clientId = clientId;
 		    _clientSecret = clientSecret;
@@ -50,8 +50,8 @@ namespace Claytondus.Square
         public async Task<SquareOAuthToken> RenewTokenAsync(string accessToken)
 		{
 		    return await
-		        PostAsync<SquareOAuthToken>("/oauth2/clients/" + _clientId + "/access-token/renew",
-		            new {access_token = accessToken}, "Client " + _clientSecret);
+		        PostAsync<SquareOAuthToken>($"/oauth2/clients/{_clientId}/access-token/renew",
+		            new {access_token = accessToken}, $"Client {_clientSecret}");
         }
 
 
