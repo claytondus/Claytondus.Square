@@ -191,3 +191,4 @@ ModelManifest.xml
 /src/packages
 *.nupkg
 .vs/
+test/Claytondus.Square.Tests/appsettings.json

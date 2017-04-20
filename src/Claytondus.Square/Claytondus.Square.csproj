@@ -5,11 +5,12 @@
     <AssemblyTitle>Claytondus.Square</AssemblyTitle>
     <AssemblyName>Claytondus.Square</AssemblyName>
     <PackageId>Claytondus.Square</PackageId>
+    <Author>Copyright 2017 Clayton Davis and Square, Inc.</Author>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.4' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <Version>0.5.0</Version>
+    <Version>0.5.1</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Description />
+    <Description>A .NET client for the Square Connect API</Description>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">

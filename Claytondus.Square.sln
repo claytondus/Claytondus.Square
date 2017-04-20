@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F5713A6B-CB67-44E3-A94D-FF5462C03DE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{450CDC7A-F4DD-4827-AFBC-6E94D76D7615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square", "src\Claytondus.Square\Claytondus.Square.csproj", "{CD828007-91EC-42D2-860A-228AD81A8B97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claytondus.Square", "src\Claytondus.Square\Claytondus.Square.csproj", "{CD828007-91EC-42D2-860A-228AD81A8B97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{96BA8D60-AC8B-4C2B-9CE9-E4EB12E99CD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claytondus.Square.Tests", "test\Claytondus.Square.Tests\Claytondus.Square.Tests.csproj", "{0BBD204A-56CA-44DD-A72C-22268E7C5E56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,11 +23,16 @@ Global
 		{CD828007-91EC-42D2-860A-228AD81A8B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD828007-91EC-42D2-860A-228AD81A8B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD828007-91EC-42D2-860A-228AD81A8B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BBD204A-56CA-44DD-A72C-22268E7C5E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BBD204A-56CA-44DD-A72C-22268E7C5E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BBD204A-56CA-44DD-A72C-22268E7C5E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BBD204A-56CA-44DD-A72C-22268E7C5E56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CD828007-91EC-42D2-860A-228AD81A8B97} = {F5713A6B-CB67-44E3-A94D-FF5462C03DE5}
+		{0BBD204A-56CA-44DD-A72C-22268E7C5E56} = {96BA8D60-AC8B-4C2B-9CE9-E4EB12E99CD0}
 	EndGlobalSection
 EndGlobal
