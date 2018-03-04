@@ -8,7 +8,7 @@
     <Author>Copyright 2017 Clayton Davis and Square, Inc.</Author>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.4' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <Version>0.5.1</Version>
+    <Version>0.6.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>A .NET client for the Square Connect API</Description>
   </PropertyGroup>
@@ -17,18 +17,14 @@
     <DefineConstants>$(DefineConstants);LIBLOG_PORTABLE</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
-    <PackageReference Include="Flurl" Version="2.3.0" />
-    <PackageReference Include="Flurl.Http" Version="1.1.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  <ItemGroup>
+    <PackageReference Include="Flurl" Version="2.7.0" />
+    <PackageReference Include="Flurl.Http" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <PackageReference Include="Flurl" Version="2.3.0" />
-    <PackageReference Include="Flurl.Http" Version="1.1.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
