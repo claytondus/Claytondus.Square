@@ -23,8 +23,7 @@ namespace Claytondus.Square.Models
 		[JsonProperty(PropertyName = "payment_id")]
 		public string PaymentId { get; set; }
 
-
-
-
+        [JsonProperty(PropertyName = "request_idempotence_key")]
+        public string RequestIdempotenceKey { get; set; }
 	}
 }

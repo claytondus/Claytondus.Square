@@ -66,7 +66,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-			    var response = ex.Call.ErrorResponseBody;
+			    var response = await ex.GetResponseStringAsync();
                 var squareEx = new SquareException("error", response) { Method = "GET", Resource = resource, HttpStatus = ex.Call.HttpStatus};
                 throw squareEx;
             }
@@ -89,7 +89,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-				var response = ex.Call.ErrorResponseBody;
+				var response = await ex.GetResponseStringAsync();
 				var squareEx = new SquareException("error", response) { Method = "GET", Resource = link, HttpStatus = ex.Call.HttpStatus };
 				throw squareEx;
 			}
@@ -115,7 +115,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.Call.ErrorResponseBody;
+                var response = await ex.GetResponseStringAsync();
                 var squareEx = new SquareException("error", response) { Method = "POST", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message, RequestBody = ex.Call.RequestBody};
                 throw squareEx;
             }
@@ -160,7 +160,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.Call.ErrorResponseBody;
+                var response = ex.Call.Response.ToString();
                 var squareEx = new SquareException("error", response) { Method = "PUT", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message, RequestBody = ex.Call.RequestBody };
                 throw squareEx;
             }
@@ -184,7 +184,7 @@ namespace Claytondus.Square
             }
             catch (FlurlHttpException ex)
             {
-                var response = ex.Call.ErrorResponseBody;
+                var response = await ex.GetResponseStringAsync();
                 var squareEx = new SquareException("error", response) { Method = "DELETE", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message };
                 throw squareEx;
             }
@@ -210,7 +210,7 @@ namespace Claytondus.Square
 			}
 			catch (FlurlHttpException ex)
 			{
-                var response = ex.Call.ErrorResponseBody;
+                var response = await ex.GetResponseStringAsync();
                 var squareEx = new SquareException("error", response) { Method = "DELETE", Resource = resource, HttpStatus = ex.Call.HttpStatus, HttpMessage = ex.Message };
                 throw squareEx;
             }

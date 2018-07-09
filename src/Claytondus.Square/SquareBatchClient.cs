@@ -40,7 +40,7 @@ namespace Claytondus.Square
             }
             catch (FlurlHttpException ex)
             {
-                var squareEx = ex.GetResponseJson<SquareException>();
+                var squareEx = await ex.GetResponseJsonAsync<SquareException>();
                 squareEx.HttpStatus = ex.Call.HttpStatus;
                 throw squareEx;
             }

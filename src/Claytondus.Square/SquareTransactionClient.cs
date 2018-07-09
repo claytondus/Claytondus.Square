@@ -83,7 +83,30 @@ namespace Claytondus.Square
 			return await GetAsync<SquarePayment>("/v1/" + _merchantId + "/payments/" + paymentId);
 		}
 
-		public async Task<SquareResponse<List<SquareOrder>>> ListOrdersAsync(int limit = 100, SquareListOrder order = null)
+	    public async Task<SquareRefund> CreateRefundAsync(SquareRefund refund)
+	    {
+	        return await PostAsync<SquareRefund>("/v1/" + _merchantId + "/refunds", refund);
+	    }
+
+	    public async Task<SquareResponse<List<SquareRefund>>> ListRefundsAsync(DateTimeOffset? begin = null, DateTimeOffset? end = null,
+	        SquareListOrder order = null, int limit = 100)
+	    {
+	        begin = begin ?? DateTimeOffset.UtcNow.AddYears(-1);
+	        end = end ?? DateTimeOffset.UtcNow;
+	        order = order ?? SquareListOrder.ASC;
+	        if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException(nameof(limit));
+
+	        var refundsCriteria = new
+	        {
+	            begin_time = begin.Value.ToString("s"),
+	            end_time = end.Value.ToString("s"),
+	            order,
+	            limit
+	        };
+	        return await GetAsync<List<SquareRefund>>("/v1/" + _merchantId + "/refunds", refundsCriteria);
+	    }
+
+        public async Task<SquareResponse<List<SquareOrder>>> ListOrdersAsync(int limit = 100, SquareListOrder order = null)
 		{
 			if (limit < 1 || limit > 200) throw new ArgumentOutOfRangeException(nameof(limit));
 			order = order ?? SquareListOrder.ASC;
